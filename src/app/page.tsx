@@ -17,9 +17,13 @@ const styles = [
   {name: 'Salidas', icon: '🎭'},
 ];
 
-const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longitude=-56.1882&current=temperature_2m&timezone=auto';
+// Modified API_URL to fetch both current and next day temperature data
+const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longitude=-56.1882&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min&forecast_days=2&timezone=auto';
+
 export default function Home() {
   const [temperature, setTemperature] = useState<number | null>(null);
+  const [nextDayMaxTemperature, setNextDayMaxTemperature] = useState<number | null>(null);
+  const [nextDayMinTemperature, setNextDayMinTemperature] = useState<number | null>(null);
   const [selectedStyle, setSelectedStyle] = useState('Trabajo');
   const [outfit, setOutfit] = useState<any[]>([]);
   const [explanation, setExplanation] = useState<string>('');
@@ -27,6 +31,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const {toast} = useToast();
 
+  // useEffect to fetch temperature data
   useEffect(() => {
     const fetchTemperature = async () => {
       setLoading(true);
@@ -37,7 +42,20 @@ export default function Home() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setTemperature(data.current.temperature_2m);
+
+        if (!data.current || !data.daily || !data.daily.temperature_2m_max || !data.daily.temperature_2m_min) {
+          setError("Error: API response missing expected data.");
+          return;
+        }
+
+        const currentTemperature = data.current.temperature_2m;
+        const nextDayMaxTemperature = data.daily.temperature_2m_max[1];
+        const nextDayMinTemperature = data.daily.temperature_2m_min[1];
+
+        setTemperature(currentTemperature);
+        setNextDayMaxTemperature(nextDayMaxTemperature);
+        setNextDayMinTemperature(nextDayMinTemperature);
+
       } catch (e: any) {
         setError(`Error al obtener la temperatura: ${e.message}`);
         console.error("Error fetching temperature:", e);
@@ -72,20 +90,8 @@ export default function Home() {
       });
 
       if (outfitData) {
-        try {
-          setOutfit(outfitData.outfitSuggestion);
-          setExplanation(outfitData.justification);
-        } catch (parseError: any) {
-          console.error('Error al analizar la sugerencia de atuendo:', parseError);
-          setError(`Error al analizar la sugerencia de atuendo: ${parseError.message}`);
-          setOutfit([]);
-          setExplanation('');
-          toast({
-            title: "Error",
-            description: `Error al analizar la sugerencia de atuendo: ${parseError.message}`,
-            variant: "destructive",
-          });
-        }
+        setOutfit(outfitData.outfitSuggestion);
+        setExplanation(outfitData.justification);
       } else {
         setOutfit([]);
         setExplanation('No hay sugerencia de atuendo disponible.');
@@ -112,9 +118,15 @@ export default function Home() {
       {/* Temperature Display */}
       <Card className="shadow-md fade-in">
         <CardHeader>
-          <CardTitle>Temperatura Actual</CardTitle>
+          <CardTitle>Temperatura Actual y Pronóstico</CardTitle>
           <CardDescription>
-            {loading ? 'Cargando...' : (error ? `Error: ${error}` : `La temperatura actual es ${temperature}°C`)}
+            {loading ? 'Cargando...' : (error ? `Error: ${error}` : (
+              <>
+                La temperatura actual es {temperature}°C.
+                <br />
+                Pronóstico para mañana: Max {nextDayMaxTemperature}°C, Min {nextDayMinTemperature}°C
+              </>
+            ))}
           </CardDescription>
         </CardHeader>
       </Card>
