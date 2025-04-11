@@ -20,7 +20,7 @@ const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longit
 export default function Home() {
   const [temperature, setTemperature] = useState<number | null>(null);
   const [selectedStyle, setSelectedStyle] = useState('Casual');
-  const [outfit, setOutfit] = useState<string>('');
+  const [outfit, setOutfit] = useState<any[]>([]);
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,20 +65,27 @@ export default function Home() {
       });
 
       if (outfitData) {
-        setOutfit(outfitData.outfitSuggestion);
-        setExplanation(outfitData.justification);
+        try {
+          const parsedOutfit = JSON.parse(outfitData.outfitSuggestion);
+          setOutfit(parsedOutfit);
+          setExplanation(outfitData.justification);
+        } catch (parseError: any) {
+          console.error('Error al analizar la sugerencia de atuendo:', parseError);
+          setError(`Error al analizar la sugerencia de atuendo: ${parseError.message}`);
+          setOutfit([]);
+          setExplanation('');
+        }
       } else {
-        setOutfit('No hay sugerencia de atuendo disponible.');
-        setExplanation('');
+        setOutfit([]);
+        setExplanation('No hay sugerencia de atuendo disponible.');
       }
     } catch (err: any) {
       console.error('Error al generar el atuendo con datos:', err);
       setError(`Error al generar el atuendo: ${err.message}`);
-      setOutfit('Fallo al generar sugerencia de atuendo.');
+      setOutfit([]);
       setExplanation('');
     }
   };
-
 
   return (
     <div className="container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2">
@@ -139,17 +146,16 @@ export default function Home() {
           <CardDescription>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
-          {/*{outfit.map((item, index) => (*/}
-          {/*  <div key={index} className="flex flex-col items-center">*/}
-          {/*    <img*/}
-          {/*      src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image*/}
-          {/*      alt={item.nombre}*/}
-          {/*      className="rounded-md shadow-md w-32 h-32 object-cover"*/}
-          {/*    />*/}
-          {/*    <p className="text-sm mt-2">{item.nombre}</p>*/}
-          {/*  </div>*/}
-          {/*))}*/}
-          <p>{outfit}</p>
+          {outfit && outfit.map((item: any, index: number) => (
+            <div key={index} className="flex flex-col items-center">
+              <img
+                src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
+                alt={item.nombre}
+                className="rounded-md shadow-md w-32 h-32 object-cover"
+              />
+              <p className="text-sm mt-2">{item.nombre}</p>
+            </div>
+          ))}
         </CardContent>
       </Card>
 
