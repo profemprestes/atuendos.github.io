@@ -66,8 +66,8 @@ export default function Home() {
 
       if (outfitData) {
         try {
-          const parsedOutfit = JSON.parse(outfitData.outfitSuggestion);
-          setOutfit(parsedOutfit);
+          // Now the outfitSuggestion comes as a plain string, no need to parse it as JSON
+          setOutfit(outfitData.outfitSuggestion);
           setExplanation(outfitData.justification);
         } catch (parseError: any) {
           console.error('Error al analizar la sugerencia de atuendo:', parseError);
@@ -146,7 +146,7 @@ export default function Home() {
           <CardDescription>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
-          {outfit && outfit.map((item: any, index: number) => (
+          {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
             <div key={index} className="flex flex-col items-center">
               <img
                 src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image

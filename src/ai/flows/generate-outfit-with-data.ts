@@ -19,7 +19,10 @@ const GenerateOutfitWithDataInputSchema = z.object({
 export type GenerateOutfitWithDataInput = z.infer<typeof GenerateOutfitWithDataInputSchema>;
 
 const GenerateOutfitWithDataOutputSchema = z.object({
-  outfitSuggestion: z.string().describe('The outfit suggestion.'),
+  outfitSuggestion: z.array(z.object({
+    nombre: z.string(),
+    imagen_url: z.string(),
+  })).describe('The outfit suggestion, an array of items with name and image URL.'),
   justification: z.string().describe('The justification for the outfit suggestion.'),
 });
 export type GenerateOutfitWithDataOutput = z.infer<typeof GenerateOutfitWithDataOutputSchema>;
@@ -50,25 +53,23 @@ const prompt = ai.definePrompt({
   },
   output: {
     schema: z.object({
-      outfitSuggestion: z.string().describe('The outfit suggestion.'),
+      outfitSuggestion: z.array(z.object({
+        nombre: z.string(),
+        imagen_url: z.string(),
+      })).describe('The outfit suggestion, an array of items with name and image URL.'),
       justification: z.string().describe('The justification for the outfit suggestion.'),
     }),
   },
   prompt: `Eres un estilista personal.
-
   La temperatura es {{temperatureCelsius}} grados Celsius.
   El estilo seleccionado es {{style}}.
   Tienes las siguientes prendas disponibles:
   {{#each clothingItems}}
   - {{nombre}} (categoría: {{categoria}}, estilos: {{estilos}})
   {{/each}}
-
   Genera una sugerencia de atuendo adecuada para la temperatura y el estilo, utilizando solo las prendas proporcionadas.
-
   Proporciona una justificación para la sugerencia de atuendo, teniendo en cuenta las tendencias de la moda y los principios de estilo.
-
-  Responde en formato JSON con las claves "outfitSuggestion" y "justification".
-  `,
+  Responde en formato JSON con las claves "outfitSuggestion" (un array de objetos con nombre e imagen_url) y "justification".`,
 });
 
 const generateOutfitWithDataFlow = ai.defineFlow<
@@ -101,4 +102,3 @@ const generateOutfitWithDataFlow = ai.defineFlow<
   });
   return output!;
 });
-
