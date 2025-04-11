@@ -65,9 +65,8 @@ export default function Home() {
       });
 
       if (outfitData) {
-        const parsedOutfit = JSON.parse(outfitData.outfitSuggestion);
-        setOutfit(parsedOutfit.outfitSuggestion);
-        setExplanation(parsedOutfit.justification);
+        setOutfit(outfitData.outfitSuggestion);
+        setExplanation(outfitData.justification);
       } else {
         setOutfit('No outfit suggestion available.');
         setExplanation('');
