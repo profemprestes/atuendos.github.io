@@ -8,18 +8,19 @@ import {generateOutfitWithData} from '@/ai/flows/generate-outfit-with-data';
 import prendas from '@/components/data/prendas.json';
 
 const styles = [
-  {name: 'Casual', icon: '👕'},
-  {name: 'Formal', icon: '👔'},
-  {name: 'Sporty', icon: '👟'},
-  {name: 'Bohemian', icon: '🥻'},
-  {name: 'Vintage', icon: '🎩'},
+  {name: 'Trabajo', icon: '💼'},
+  {name: 'Trabajo Formal', icon: '👔'},
+  {name: 'Casa', icon: '🏠'},
+  {name: 'Casa Formal', icon: '🥻'},
+  {name: 'Deporte', icon: '🏃'},
+  {name: 'Salidas', icon: '🎭'},
 ];
 
 const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longitude=-56.1882&current=temperature_2m&timezone=auto';
 
 export default function Home() {
   const [temperature, setTemperature] = useState<number | null>(null);
-  const [selectedStyle, setSelectedStyle] = useState('Casual');
+  const [selectedStyle, setSelectedStyle] = useState('Trabajo');
   const [outfit, setOutfit] = useState<any[]>([]);
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -66,7 +67,6 @@ export default function Home() {
 
       if (outfitData) {
         try {
-          // Now the outfitSuggestion comes as a plain string, no need to parse it as JSON
           setOutfit(outfitData.outfitSuggestion);
           setExplanation(outfitData.justification);
         } catch (parseError: any) {
@@ -147,13 +147,19 @@ export default function Home() {
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
           {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
-            <div key={index} className="flex flex-col items-center">
+            <div key={index} className="flex flex-col items-center border p-2">
               <img
                 src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
                 alt={item.nombre}
                 className="rounded-md shadow-md w-32 h-32 object-cover"
               />
               <p className="text-sm mt-2">{item.nombre}</p>
+              <div className="text-xs text-gray-500 mt-1">
+                <div>Categoría: {item.categoria}</div>
+                <div>Color: {item.color}</div>
+                <div>Material: {item.material}</div>
+                <div>Descripción: {item.descripcion_adicional}</div>
+              </div>
             </div>
           ))}
         </CardContent>
@@ -174,3 +180,4 @@ export default function Home() {
     </div>
   );
 }
+
