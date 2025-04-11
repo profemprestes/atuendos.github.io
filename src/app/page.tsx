@@ -18,7 +18,6 @@ const styles = [
 ];
 
 const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longitude=-56.1882&current=temperature_2m&timezone=auto';
-
 export default function Home() {
   const [temperature, setTemperature] = useState<number | null>(null);
   const [selectedStyle, setSelectedStyle] = useState('Trabajo');
@@ -201,4 +200,3 @@ export default function Home() {
     </div>
   );
 }
-
