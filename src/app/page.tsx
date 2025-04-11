@@ -101,7 +101,7 @@ export default function Home() {
       });
 
       if (outfitData) {
-        setOutfit(outfitData.outfitSuggestion);
+        setOutfit(outfitData);
         setExplanation(outfitData.justification);
       } else {
         setOutfit([]);
@@ -139,7 +139,7 @@ export default function Home() {
       });
 
       if (outfitData) {
-        setTomorrowOutfit(outfitData.outfitSuggestion);
+        setTomorrowOutfit(outfitData);
         setTomorrowExplanation(outfitData.justification);
       } else {
         setTomorrowOutfit([]);
@@ -165,7 +165,7 @@ export default function Home() {
   return (
     <div className={cn("fade-in container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2", styles.container)}>
       {/* Temperature Display */}
-      <Card className={cn("shadow-md fade-in", styles.card)}>
+      <Card className={cn("shadow-md fade-in", styles.card, styles.temperatureDisplayCard)}>
         <CardHeader className={styles.cardHeader}>
           <CardTitle className={styles.cardTitle}>Temperatura Actual y Pronóstico</CardTitle>
           <CardDescription className={styles.cardDescription}>
@@ -181,7 +181,7 @@ export default function Home() {
       </Card>
 
       {/* Temperature Input */}
-      <Card className={cn("shadow-md fade-in", styles.card)}>
+      <Card className={cn("shadow-md fade-in", styles.card, styles.temperatureInputCard)}>
         <CardHeader className={styles.cardHeader}>
           <CardTitle className={styles.cardTitle}>Temperatura Preferida</CardTitle>
           <CardDescription className={styles.cardDescription}>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
@@ -234,13 +234,13 @@ export default function Home() {
                 alt={item.nombre}
                 className={cn("rounded-md shadow-md w-32 h-32 object-cover", styles.outfitImage)}
               />
-              <p className={cn("text-sm mt-2", styles.outfitName)}>{item.nombre}</p>
               <div className="text-xs text-gray-500 mt-1">
                 <div>Categoría: {item.categoria}</div>
                 <div>Color: {item.color}</div>
                 <div>Material: {item.material}</div>
                 <div>Descripción: {item.descripcion_adicional}</div>
               </div>
+              <p className={cn("text-sm mt-2", styles.outfitName)}>{item.nombre}</p>
             </div>
           ))}
         </CardContent>
@@ -260,13 +260,13 @@ export default function Home() {
                 alt={item.nombre}
                 className={cn("rounded-md shadow-md w-32 h-32 object-cover", styles.outfitImage)}
               />
-              <p className={cn("text-sm mt-2", styles.outfitName)}>{item.nombre}</p>
               <div className="text-xs text-gray-500 mt-1">
                 <div>Categoría: {item.categoria}</div>
                 <div>Color: {item.color}</div>
                 <div>Material: {item.material}</div>
                 <div>Descripción: {item.descripcion_adicional}</div>
               </div>
+              <p className={cn("text-sm mt-2", styles.outfitName)}>{item.nombre}</p>
             </div>
           ))}
         </CardContent>

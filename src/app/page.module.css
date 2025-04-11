@@ -1,3 +1,4 @@
+
 .container {
     padding: 20px;
     margin: 0 auto;
@@ -123,6 +124,19 @@
       width: 60px;
       height: 60px;
     }
+  }
+  
+  .temperatureDisplayCard {
+    /* Add specific styles for the temperature display card */
+    background-color: #f0faff; /* Light blue background */
+    border: 1px solid #b0e2ff; /* Light blue border */
+    color: #333; /* Darker text for better readability */
+  }
+  
+  .temperatureInputCard {
+    /* Add specific styles for the temperature input card */
+    background-color: #fffff0; /* Light yellow background */
+    border: 1px solid #eee8aa; /* Light yellow border */
   }
   
   
