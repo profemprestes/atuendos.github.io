@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Trabajo",
+    "icon": "💼"
+  },
+  {
+    "name": "Casa",
+    "icon": "🏠"
+  },
+  {
+    "name": "Trabajo Formal",
+    "icon": "👔"
+  },
+  {
+    "name": "Casa Formal",
+    "icon": "🥻"
+  },
+  {
+    "name": "Deporte",
+    "icon": "🏃"
+  },
+  {
+    "name": "Salidas",
+    "icon": "🎭"
+  }
+]
