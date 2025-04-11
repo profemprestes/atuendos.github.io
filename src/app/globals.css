@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
   :root {
-    --background: 240 5% 96%; /* Light Gray */
+    --background: 240 5% 96%; 
     --foreground: 240 10% 3.9%;
-    --primary: 210 100% 60%; /* Calming Blue/Teal */
+    --primary: 210 100% 60%; 
     --primary-foreground: 35 100% 98%;
-    --secondary: 210 100% 60%; /* Calming Blue/Teal */
+    --secondary: 210 100% 60%; 
     --secondary-foreground: 35 100% 98%;
-    --accent: 16 94% 59%; /* Coral */
+    --accent: 16 94% 59%; 
     --accent-foreground: 0 0% 10%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -20,31 +20,31 @@
     --muted-foreground: 240 8% 46.1%;
     --border: 240 5.9% 88%;
     --input: 240 5.9% 88%;
-    --ring: 210 100% 60%; /* Calming Blue/Teal */
+    --ring: 210 100% 60%; 
     --radius: 0.5rem;
 
     --geist-sans: Geist, sans-serif;
     --geist-mono: Geist_Mono, monospace;
 
-    /* Sidebar Colors */
-    --sidebar-background: 0 0% 100%; /* White */
-    --sidebar-foreground: 240 10% 3.9%; /* Dark Gray */
-    --sidebar-primary: 210 100% 60%; /* Calming Blue/Teal */
+    
+    --sidebar-background: 0 0% 100%; 
+    --sidebar-foreground: 240 10% 3.9%; 
+    --sidebar-primary: 210 100% 60%; 
     --sidebar-primary-foreground: 35 100% 98%;
-    --sidebar-accent: 16 94% 59%; /* Coral */
+    --sidebar-accent: 16 94% 59%; 
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 240 5.9% 88%;
-    --sidebar-ring: 210 100% 60%; /* Calming Blue/Teal */
+    --sidebar-ring: 210 100% 60%; 
   }
 
   .dark {
-    --background: 240 10% 3.9%; /* Darker Gray */
+    --background: 240 10% 3.9%; 
     --foreground: 0 0% 98%;
-    --primary: 210 100% 60%; /* Calming Blue/Teal */
+    --primary: 210 100% 60%; 
     --primary-foreground: 35 100% 98%;
-    --secondary: 210 100% 60%; /* Calming Blue/Teal */
+    --secondary: 210 100% 60%; 
     --secondary-foreground: 35 100% 98%;
-    --accent: 16 94% 59%; /* Coral */
+    --accent: 16 94% 59%; 
     --accent-foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -54,18 +54,18 @@
     --muted-foreground: 240 5% 64.9%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 210 100% 60%; /* Calming Blue/Teal */
+    --ring: 210 100% 60%; 
     --radius: 0.5rem;
 
-    /* Dark Mode Sidebar Colors */
-    --sidebar-background: 0 0% 15%; /* Dark Gray */
-    --sidebar-foreground: 0 0% 98%; /* White */
-    --sidebar-primary: 210 100% 60%; /* Calming Blue/Teal */
+    
+    --sidebar-background: 0 0% 15%; 
+    --sidebar-foreground: 0 0% 98%; 
+    --sidebar-primary: 210 100% 60%; 
     --sidebar-primary-foreground: 35 100% 98%;
-    --sidebar-accent: 16 94% 59%; /* Coral */
+    --sidebar-accent: 16 94% 59%; 
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 210 100% 60%; /* Calming Blue/Teal */
+    --sidebar-ring: 210 100% 60%; 
   }
 }
 
@@ -130,4 +130,5 @@ button {
     transform: translateY(0);
   }
 }
+
 
