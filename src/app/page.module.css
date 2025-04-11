@@ -59,6 +59,11 @@
     background-color: #007bff;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .styleButton:hover {
+    background-color: #0056b3;
   }
   
   .outfitGrid {
@@ -139,4 +144,30 @@
     border: 1px solid #eee8aa; /* Light yellow border */
   }
   
+  /* Style selection */
+  .styleButtons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+  }
   
+  .styleButton {
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .styleButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .styleButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  }
+  
+  
+

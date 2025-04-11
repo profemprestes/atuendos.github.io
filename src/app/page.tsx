@@ -181,7 +181,7 @@ export default function Home() {
       </Card>
 
       {/* Temperature Input */}
-      <Card className={cn("shadow-md fade-in", styles.card, styles.temperatureInputCard)}>
+      <Card className={cn("shadow-md fade-in", styles.card)}>
         <CardHeader className={styles.cardHeader}>
           <CardTitle className={styles.cardTitle}>Temperatura Preferida</CardTitle>
           <CardDescription className={styles.cardDescription}>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
@@ -213,6 +213,7 @@ export default function Home() {
               key={style.name}
               variant={selectedStyle === style.name ? 'primary' : 'secondary'}
               onClick={() => setSelectedStyle(style.name)}
+              className={styles.styleButton}
             >
               {style.icon} {style.name}
             </Button>
@@ -300,3 +301,4 @@ export default function Home() {
     </div>
   );
 }
+
