@@ -7,6 +7,7 @@ import {Button} from '@/components/ui/button';
 import {generateOutfitWithData} from '@/ai/flows/generate-outfit-with-data';
 import {useToast} from "@/hooks/use-toast";
 import {cn} from "@/lib/utils";
+import {explainOutfitChoice} from "@/ai/flows/explain-outfit-choice";
 
 const styles = [
   {name: 'Trabajo', icon: '💼'},
@@ -17,6 +18,12 @@ const styles = [
   {name: 'Salidas', icon: '🎭'},
 ];
 
+const temperatureRanges = {
+  frio: {min: -10, max: 10},
+  templado: {min: 11, max: 25},
+  calor: {min: 26, max: 40},
+};
+
 // Modified API_URL to fetch both current and next day temperature data
 const API_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-34.9033&longitude=-56.1882&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min&forecast_days=2&timezone=auto';
 
@@ -26,7 +33,9 @@ export default function Home() {
   const [nextDayMinTemperature, setNextDayMinTemperature] = useState<number | null>(null);
   const [selectedStyle, setSelectedStyle] = useState('Trabajo');
   const [outfit, setOutfit] = useState<any[]>([]);
+  const [tomorrowOutfit, setTomorrowOutfit] = useState<any[]>([]);
   const [explanation, setExplanation] = useState<string>('');
+  const [tomorrowExplanation, setTomorrowExplanation] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const {toast} = useToast();
@@ -75,8 +84,9 @@ export default function Home() {
   useEffect(() => {
     if (temperature !== null) {
       generateOutfit();
+      generateTomorrowOutfit();
     }
-  }, [temperature, selectedStyle]);
+  }, [temperature, selectedStyle, nextDayMaxTemperature, nextDayMinTemperature]);
 
   const generateOutfit = async () => {
     if (temperature === null) {
@@ -90,7 +100,7 @@ export default function Home() {
       });
 
       if (outfitData) {
-        setOutfit(outfitData.outfitSuggestion);
+        setOutfit(outfitData);
         setExplanation(outfitData.justification);
       } else {
         setOutfit([]);
@@ -108,6 +118,44 @@ export default function Home() {
       toast({
         title: "Error",
         description: `Error al generar el atuendo: ${err.message}`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const generateTomorrowOutfit = async () => {
+    if (nextDayMaxTemperature === null || nextDayMinTemperature === null) {
+      return;
+    }
+
+    // Use the average temperature for tomorrow's outfit suggestion
+    const avgTomorrowTemperature = (nextDayMaxTemperature + nextDayMinTemperature) / 2;
+
+    try {
+      const outfitData = await generateOutfitWithData({
+        temperatureCelsius: avgTomorrowTemperature,
+        style: selectedStyle,
+      });
+
+      if (outfitData) {
+        setTomorrowOutfit(outfitData);
+        setTomorrowExplanation(outfitData.justification);
+      } else {
+        setTomorrowOutfit([]);
+        setTomorrowExplanation('No hay sugerencia de atuendo disponible para mañana.');
+        toast({
+          title: "Sin sugerencias para mañana",
+          description: "No hay sugerencias de atuendo disponibles para los criterios seleccionados para mañana.",
+        });
+      }
+    } catch (err: any) {
+      console.error('Error al generar el atuendo para mañana con datos:', err);
+      setError(`Error al generar el atuendo para mañana: ${err.message}`);
+      setTomorrowOutfit([]);
+      setTomorrowExplanation('');
+      toast({
+        title: "Error",
+        description: `Error al generar el atuendo para mañana: ${err.message}`,
         variant: "destructive",
       });
     }
@@ -178,7 +226,33 @@ export default function Home() {
           <CardDescription>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
-          {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
+          {outfit?.outfitSuggestion && Array.isArray(outfit?.outfitSuggestion) && outfit?.outfitSuggestion.map((item: any, index: number) => (
+            <div key={index} className="flex flex-col items-center border p-2 rounded-lg hover:shadow-lg transition-shadow duration-300">
+              <img
+                src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
+                alt={item.nombre}
+                className="rounded-md shadow-md w-32 h-32 object-cover"
+              />
+              <p className="text-sm mt-2">{item.nombre}</p>
+              <div className="text-xs text-gray-500 mt-1">
+                <div>Categoría: {item.categoria}</div>
+                <div>Color: {item.color}</div>
+                <div>Material: {item.material}</div>
+                <div>Descripción: {item.descripcion_adicional}</div>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Outfit Suggestion for Tomorrow Display */}
+      <Card className="md:col-span-2 shadow-md fade-in">
+        <CardHeader>
+          <CardTitle>Sugerencia de Atuendo para Mañana</CardTitle>
+          <CardDescription>Aquí hay una sugerencia de atuendo basada en el pronóstico para mañana.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
+          {tomorrowOutfit?.outfitSuggestion && Array.isArray(tomorrowOutfit?.outfitSuggestion) && tomorrowOutfit?.outfitSuggestion.map((item: any, index: number) => (
             <div key={index} className="flex flex-col items-center border p-2 rounded-lg hover:shadow-lg transition-shadow duration-300">
               <img
                 src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
@@ -206,6 +280,19 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <p>{explanation}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Tomorrow Outfit Explanation */}
+      {tomorrowExplanation && (
+        <Card className="md:col-span-2 shadow-md fade-in">
+          <CardHeader>
+            <CardTitle>Explicación para el Atuendo de Mañana</CardTitle>
+            <CardDescription>Por qué este atuendo es adecuado para el pronóstico de mañana.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>{tomorrowExplanation}</p>
           </CardContent>
         </Card>
       )}
