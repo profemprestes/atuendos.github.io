@@ -37,7 +37,7 @@ export default function Home() {
         const data = await response.json();
         setTemperature(data.current.temperature_2m);
       } catch (e: any) {
-        setError(`Failed to fetch temperature: ${e.message}`);
+        setError(`Error al obtener la temperatura: ${e.message}`);
         console.error("Error fetching temperature:", e);
       } finally {
         setLoading(false);
@@ -68,13 +68,13 @@ export default function Home() {
         setOutfit(outfitData.outfitSuggestion);
         setExplanation(outfitData.justification);
       } else {
-        setOutfit('No outfit suggestion available.');
+        setOutfit('No hay sugerencia de atuendo disponible.');
         setExplanation('');
       }
     } catch (err: any) {
-      console.error('Error generating outfit with data:', err);
-      setError(`Failed to generate outfit: ${err.message}`);
-      setOutfit('Failed to generate outfit suggestion.');
+      console.error('Error al generar el atuendo con datos:', err);
+      setError(`Error al generar el atuendo: ${err.message}`);
+      setOutfit('Fallo al generar sugerencia de atuendo.');
       setExplanation('');
     }
   };
@@ -85,9 +85,9 @@ export default function Home() {
       {/* Temperature Display */}
       <Card>
         <CardHeader>
-          <CardTitle>Current Temperature</CardTitle>
+          <CardTitle>Temperatura Actual</CardTitle>
           <CardDescription>
-            {loading ? 'Loading...' : (error ? `Error: ${error}` : `The current temperature is ${temperature}°C`)}
+            {loading ? 'Cargando...' : (error ? `Error: ${error}` : `La temperatura actual es ${temperature}°C`)}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -95,8 +95,8 @@ export default function Home() {
       {/* Temperature Input */}
       <Card>
         <CardHeader>
-          <CardTitle>Preferred Temperature</CardTitle>
-          <CardDescription>Adjust the temperature to see outfit suggestions.</CardDescription>
+          <CardTitle>Temperatura Preferida</CardTitle>
+          <CardDescription>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2">
@@ -116,8 +116,8 @@ export default function Home() {
       {/* Style Selection */}
       <Card>
         <CardHeader>
-          <CardTitle>Style</CardTitle>
-          <CardDescription>Choose your preferred style.</CardDescription>
+          <CardTitle>Estilo</CardTitle>
+          <CardDescription>Escoge tu estilo preferido.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-3">
           {styles.map((style) => (
@@ -135,8 +135,8 @@ export default function Home() {
       {/* Outfit Suggestion Display */}
       <Card className="md:col-span-2">
         <CardHeader>
-          <CardTitle>Outfit Suggestion</CardTitle>
-          <CardDescription>Here's an outfit suggestion based on your preferences.</CardDescription>
+          <CardTitle>Sugerencia de Atuendo</CardTitle>
+          <CardDescription>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
           {/*{outfit.map((item, index) => (*/}
@@ -157,8 +157,8 @@ export default function Home() {
       {explanation && (
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Explanation</CardTitle>
-            <CardDescription>Why this outfit is suitable.</CardDescription>
+            <CardTitle>Explicación</CardTitle>
+            <CardDescription>Por qué este atuendo es adecuado.</CardDescription>
           </CardHeader>
           <CardContent>
             <p>{explanation}</p>
