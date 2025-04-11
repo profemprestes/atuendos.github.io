@@ -5,7 +5,8 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/compo
 import {Slider} from '@/components/ui/slider';
 import {Button} from '@/components/ui/button';
 import {generateOutfitWithData} from '@/ai/flows/generate-outfit-with-data';
-import prendas from '@/components/data/prendas.json';
+import {useToast} from "@/hooks/use-toast";
+import {cn} from "@/lib/utils";
 
 const styles = [
   {name: 'Trabajo', icon: '💼'},
@@ -25,6 +26,7 @@ export default function Home() {
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const {toast} = useToast();
 
   useEffect(() => {
     const fetchTemperature = async () => {
@@ -40,6 +42,11 @@ export default function Home() {
       } catch (e: any) {
         setError(`Error al obtener la temperatura: ${e.message}`);
         console.error("Error fetching temperature:", e);
+        toast({
+          title: "Error",
+          description: `Error al obtener la temperatura: ${e.message}`,
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
@@ -74,23 +81,37 @@ export default function Home() {
           setError(`Error al analizar la sugerencia de atuendo: ${parseError.message}`);
           setOutfit([]);
           setExplanation('');
+          toast({
+            title: "Error",
+            description: `Error al analizar la sugerencia de atuendo: ${parseError.message}`,
+            variant: "destructive",
+          });
         }
       } else {
         setOutfit([]);
         setExplanation('No hay sugerencia de atuendo disponible.');
+        toast({
+          title: "Sin sugerencias",
+          description: "No hay sugerencias de atuendo disponibles para los criterios seleccionados.",
+        });
       }
     } catch (err: any) {
       console.error('Error al generar el atuendo con datos:', err);
       setError(`Error al generar el atuendo: ${err.message}`);
       setOutfit([]);
       setExplanation('');
+      toast({
+        title: "Error",
+        description: `Error al generar el atuendo: ${err.message}`,
+        variant: "destructive",
+      });
     }
   };
 
   return (
-    <div className="container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2">
+    <div className="fade-in container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2">
       {/* Temperature Display */}
-      <Card>
+      <Card className="shadow-md fade-in">
         <CardHeader>
           <CardTitle>Temperatura Actual</CardTitle>
           <CardDescription>
@@ -100,7 +121,7 @@ export default function Home() {
       </Card>
 
       {/* Temperature Input */}
-      <Card>
+      <Card className="shadow-md fade-in">
         <CardHeader>
           <CardTitle>Temperatura Preferida</CardTitle>
           <CardDescription>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
@@ -121,7 +142,7 @@ export default function Home() {
       </Card>
 
       {/* Style Selection */}
-      <Card>
+      <Card className="shadow-md fade-in">
         <CardHeader>
           <CardTitle>Estilo</CardTitle>
           <CardDescription>Escoge tu estilo preferido.</CardDescription>
@@ -140,14 +161,14 @@ export default function Home() {
       </Card>
 
       {/* Outfit Suggestion Display */}
-      <Card className="md:col-span-2">
+      <Card className="md:col-span-2 shadow-md fade-in">
         <CardHeader>
           <CardTitle>Sugerencia de Atuendo</CardTitle>
           <CardDescription>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-3">
           {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
-            <div key={index} className="flex flex-col items-center border p-2">
+            <div key={index} className="flex flex-col items-center border p-2 rounded-lg hover:shadow-lg transition-shadow duration-300">
               <img
                 src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
                 alt={item.nombre}
@@ -167,7 +188,7 @@ export default function Home() {
 
       {/* Outfit Explanation */}
       {explanation && (
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 shadow-md fade-in">
           <CardHeader>
             <CardTitle>Explicación</CardTitle>
             <CardDescription>Por qué este atuendo es adecuado.</CardDescription>
