@@ -9,14 +9,18 @@ import {useToast} from "@/hooks/use-toast";
 import {cn} from "@/lib/utils";
 import pageStyles from './page.module.css';
 import { metadata } from './head';
+import Hero from './hero';
+
+// First, add this import at the top with other imports
+import { Icons } from '@/components/icons';
 
 const stylesArr = [
-  {name: 'Trabajo', icon: '💼'},
-  {name: 'Trabajo Formal', icon: '👔'},
-  {name: 'Casa', icon: '🏠'},
-  {name: 'Casa Formal', icon: '🥻'},
-  {name: 'Deporte', icon: '🏃'},
-  {name: 'Salidas', icon: '🎭'},
+  {name: 'Trabajo', icon: 'workflow'},
+  {name: 'Trabajo Formal', icon: 'user'},
+  {name: 'Casa', icon: 'home'},
+  {name: 'Casa Formal', icon: 'shield'},
+  {name: 'Deporte', icon: 'share'},
+  {name: 'Salidas', icon: 'messageSquare'},
 ];
 
 const temperatureRanges = {
@@ -89,10 +93,15 @@ export default function Home() {
     }
   }, [temperature, selectedStyle, nextDayMaxTemperature, nextDayMinTemperature]);
 
-  const generateOutfit = async () => {
-    if (temperature === null) {
-      return;
+  const handleApiError = (err: any) => {
+    if (err.message.includes('429 Too Many Requests')) {
+      return 'El servicio está ocupado. Por favor intente nuevamente en un momento.';
     }
+    return `Error: ${err.message}`;
+  };
+
+  const generateOutfit = async () => {
+    if (temperature === null) return;
 
     try {
       const outfitData = await generateOutfitWithData({
@@ -113,21 +122,20 @@ export default function Home() {
       }
     } catch (err: any) {
       console.error('Error al generar el atuendo con datos:', err);
-      setError(`Error al generar el atuendo: ${err.message}`);
+      const errorMessage = handleApiError(err);
+      setError(errorMessage);
       setOutfit([]);
       setExplanation('');
       toast({
         title: "Error",
-        description: `Error al generar el atuendo: ${err.message}`,
+        description: errorMessage,
         variant: "destructive",
       });
     }
   };
 
   const generateTomorrowOutfit = async () => {
-    if (nextDayMaxTemperature === null || nextDayMinTemperature === null) {
-      return;
-    }
+    if (nextDayMaxTemperature === null || nextDayMinTemperature === null) return;
 
     // Use the average temperature for tomorrow's outfit suggestion
     const avgTomorrowTemperature = (nextDayMaxTemperature + nextDayMinTemperature) / 2;
@@ -151,154 +159,18 @@ export default function Home() {
       }
     } catch (err: any) {
       console.error('Error al generar el atuendo para mañana con datos:', err);
-      setError(`Error al generar el atuendo para mañana: ${err.message}`);
+      const errorMessage = handleApiError(err);
+      setError(errorMessage);
       setTomorrowOutfit([]);
       setTomorrowExplanation('');
       toast({
         title: "Error",
-        description: `Error al generar el atuendo para mañana: ${err.message}`,
+        description: errorMessage,
         variant: "destructive",
       });
     }
   };
-
-  return (
-    <div className={pageStyles.container}>
-      {/* Temperature Display */}
-      <Card className={cn(pageStyles.card, pageStyles.temperatureDisplayCard)}>
-        <CardHeader className={pageStyles.cardHeader}>
-          <CardTitle className={pageStyles.cardTitle}>Temperatura Actual y Pronóstico</CardTitle>
-          <CardDescription className={pageStyles.cardDescription}>
-            {loading ? 'Cargando...' : (error ? `Error: ${error}` : (
-              <>
-                La temperatura actual es <span className={pageStyles.temperature}>{temperature}°C</span>.
-                <br />
-                Pronóstico para mañana: Max <span className={pageStyles.temperature}>{nextDayMaxTemperature}°C</span>, Min <span className={pageStyles.temperature}>{nextDayMinTemperature}°C</span>
-              </>
-            ))}
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
-      {/* Temperature Input */}
-      <Card className={cn(pageStyles.card, pageStyles.temperatureInputCard)}>
-        <CardHeader className={pageStyles.cardHeader}>
-          <CardTitle className={pageStyles.cardTitle}>Temperatura Preferida</CardTitle>
-          <CardDescription className={pageStyles.cardDescription}>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
-        </CardHeader>
-        <CardContent className={pageStyles.sliderContainer}>
-          <Slider
-            className={pageStyles.slider}
-            defaultValue={[20]}
-            min={0}
-            max={35}
-            step={1}
-            onValueChange={(value) => setTemperature(value[0])}
-            disabled={loading || error !== null}
-          />
-          <span className={pageStyles.temperatureValue}>{temperature !== null ? temperature : '--'}°C</span>
-        </CardContent>
-      </Card>
-
-      {/* Style Selection */}
-      <Card className={pageStyles.card}>
-        <CardHeader className={pageStyles.cardHeader}>
-          <CardTitle className={pageStyles.cardTitle}>Estilo</CardTitle>
-          <CardDescription className={pageStyles.cardDescription}>Escoge tu estilo preferido.</CardDescription>
-        </CardHeader>
-        <CardContent className={pageStyles.styleButtons}>
-          {stylesArr.map((style) => (
-            <Button
-              key={style.name}
-              className={pageStyles.styleButton}
-              variant={selectedStyle === style.name ? 'default' : 'secondary'}
-              onClick={() => setSelectedStyle(style.name)}
-            >
-              {style.icon} {style.name}
-            </Button>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Outfit Suggestion Display */}
-      <Card className={cn("md:col-span-2 shadow-md fade-in", pageStyles.card)}>
-        <CardHeader className={pageStyles.cardHeader}>
-          <CardTitle className={pageStyles.cardTitle}>Sugerencia de Atuendo</CardTitle>
-          <CardDescription className={pageStyles.cardDescription}>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
-        </CardHeader>
-        <CardContent className={cn("grid gap-4 grid-cols-1 md:grid-cols-3", pageStyles.outfitGrid)}>
-          {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
-            <div key={index} className={cn("flex flex-col items-center", pageStyles.outfitItem)}>
-              <img
-                src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
-                alt={item.nombre}
-                className={cn("rounded-md shadow-md w-32 h-32 object-cover", pageStyles.outfitImage)}
-              />
-              <div className={cn("text-xs text-gray-500 mt-1", pageStyles.outfitDetails)}>
-                <div>Categoría: {item.categoria}</div>
-                <div>Color: {item.color}</div>
-                <div>Material: {item.material}</div>
-                <div>Descripción: {item.descripcion_adicional}</div>
-              </div>
-              <p className={cn("text-sm mt-2", pageStyles.outfitName)}>{item.nombre}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Outfit Suggestion for Tomorrow Display */}
-      <Card className={cn("md:col-span-2 shadow-md fade-in", pageStyles.card)}>
-        <CardHeader className={pageStyles.cardHeader}>
-          <CardTitle className={pageStyles.cardTitle}>Sugerencia de Atuendo para Mañana</CardTitle>
-          <CardDescription className={pageStyles.cardDescription}>Aquí hay una sugerencia de atuendo basada en el pronóstico para mañana.</CardDescription>
-        </CardHeader>
-        <CardContent className={cn("grid gap-4 grid-cols-1 md:grid-cols-3", pageStyles.outfitGrid)}>
-          {tomorrowOutfit && Array.isArray(tomorrowOutfit) && tomorrowOutfit.map((item: any, index: number) => (
-            <div key={index} className={cn("flex flex-col items-center", pageStyles.outfitItem)}>
-              <img
-                src={item.imagen_url || 'https://picsum.photos/100/100'} // Placeholder image
-                alt={item.nombre}
-                className={cn("rounded-md shadow-md w-32 h-32 object-cover", pageStyles.outfitImage)}
-              />
-              <div className={cn("text-xs text-gray-500 mt-1", pageStyles.outfitDetails)}>
-                <div>Categoría: {item.categoria}</div>
-                <div>Color: {item.color}</div>
-                <div>Material: {item.material}</div>
-                <div>Descripción: {item.descripcion_adicional}</div>
-              </div>
-              <p className={cn("text-sm mt-2", pageStyles.outfitName)}>{item.nombre}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Outfit Explanation */}
-      {explanation && (
-        <Card className={cn("md:col-span-2 shadow-md fade-in", pageStyles.card)}>
-          <CardHeader className={pageStyles.cardHeader}>
-            <CardTitle className={pageStyles.cardTitle}>Explicación</CardTitle>
-            <CardDescription className={pageStyles.cardDescription}>Por qué este atuendo es adecuado.</CardDescription>
-          </CardHeader>
-          <CardContent className={pageStyles.cardContent}>
-            <p className={pageStyles.explanation}>{explanation}</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Tomorrow Outfit Explanation */}
-      {tomorrowExplanation && (
-        <Card className={cn("md:col-span-2 shadow-md fade-in", pageStyles.card)}>
-          <CardHeader className={pageStyles.cardHeader}>
-            <CardTitle className={pageStyles.cardTitle}>Explicación para el Atuendo de Mañana</CardTitle>
-            <CardDescription className={pageStyles.cardDescription}>Por qué este atuendo es adecuado para el pronóstico de mañana.</CardDescription>
-          </CardHeader>
-          <CardContent className={pageStyles.cardContent}>
-            <p className={pageStyles.explanation}>{tomorrowExplanation}</p>
-          </CardContent>
-        </Card>
-      )}
-    </div>
-  );
+  // Document title effect - moved inside the component
   useEffect(() => {
     if (temperature !== null) {
       document.title = `Atuendos para ${temperature}°C | ${metadata.title?.toString() || 'Atuendos'}`;
@@ -306,4 +178,171 @@ export default function Home() {
       document.title = metadata.title?.toString() || 'Atuendos';
     }
   }, [temperature]);
+
+  return (
+<main>
+      {/* Updated Hero component with temperature props */}
+      <Hero 
+        temperature={temperature}
+        nextDayMaxTemperature={nextDayMaxTemperature}
+        nextDayMinTemperature={nextDayMinTemperature}
+        loading={loading}
+        error={error}
+      />
+      
+      {/* Combined Temperature Input and Style Selection */}
+      <div className={pageStyles.inputsRow}>
+        {/* Temperature Input */}
+        <Card className={pageStyles.temperatureInputCard}>
+          <CardHeader className={pageStyles.temperatureInputHeader}>
+            <CardTitle className={pageStyles.temperatureInputTitle}>Temperatura Preferida</CardTitle>
+            <CardDescription className={pageStyles.temperatureInputDescription}>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
+          </CardHeader>
+          <CardContent className={pageStyles.temperatureSliderContainer}>
+            <div className={pageStyles.sliderWrapper}>
+              <Slider
+                value={[temperature !== null ? temperature : 20]}
+                min={0}
+                max={35}
+                step={1}
+                onValueChange={(value) => setTemperature(value[0])}
+                disabled={loading || error !== null}
+                className={pageStyles.temperatureSlider}
+              />
+            </div>
+            <div className={pageStyles.temperatureDisplayContainer}>
+              <span 
+                className={pageStyles.temperatureDisplay}
+                data-temp-range={
+                  temperature !== null ? 
+                    (temperature <= 10 ? 'frio' : 
+                     temperature <= 25 ? 'templado' : 'calor') 
+                    : ''
+                }
+              >
+                {temperature !== null ? temperature : '--'}°C
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Style Selection */}
+        <Card className={pageStyles.styleSelectionCard}>
+          <CardHeader className={pageStyles.styleSelectionHeader}>
+            <CardTitle className={pageStyles.styleSelectionTitle}>Estilo</CardTitle>
+            <CardDescription className={pageStyles.styleSelectionDescription}>Escoge tu estilo preferido.</CardDescription>
+          </CardHeader>
+          <CardContent className={pageStyles.styleButtonsContainer}>
+            {stylesArr.map((style) => {
+              const IconComponent = Icons[style.icon.toLowerCase().replace(' ', '')] || Icons.workflow;
+              return (
+                <Button
+                  key={style.name}
+                  className={cn(
+                    "flex-col h-auto py-3",
+                    pageStyles.styleButton,
+                    selectedStyle === style.name && pageStyles.styleButtonActive
+                  )}
+                  variant={selectedStyle === style.name ? "default" : "outline"}
+                  onClick={() => setSelectedStyle(style.name)}
+                >
+                  <IconComponent className="w-5 h-5 mb-1" />
+                  <span className={pageStyles.styleButtonText}>{style.name}</span>
+                </Button>
+              );
+            })}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className={pageStyles.outfitsContainer}>
+        {/* Outfit Suggestion Display */}
+        <Card className={pageStyles.outfitSuggestionCard}>
+          <CardHeader className={pageStyles.outfitCardHeader}>
+            <CardTitle className={pageStyles.outfitCardTitle}>Sugerencia de Atuendo</CardTitle>
+            <CardDescription className={pageStyles.outfitCardDescription}>Aquí hay una sugerencia de atuendo basada en tus preferencias.</CardDescription>
+          </CardHeader>
+          <CardContent className={pageStyles.outfitGrid}>
+            {outfit && Array.isArray(outfit) && outfit.map((item: any, index: number) => (
+              <div key={index} className={pageStyles.outfitItem}>
+                <div className={pageStyles.outfitImageContainer}>
+                  <img
+                    src={item.imagen_url || 'https://picsum.photos/100/100'}
+                    alt={item.nombre}
+                    className={pageStyles.outfitImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={pageStyles.outfitDetails}>
+                  <div><strong>Categoría:</strong> {item.categoria}</div>
+                  <div><strong>Color:</strong> {item.color}</div>
+                  <div><strong>Material:</strong> {item.material}</div>
+                  <div><strong>Descripción:</strong> {item.descripcion_adicional}</div>
+                </div>
+                <p className={pageStyles.outfitName}>{item.nombre}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Outfit Suggestion for Tomorrow Display */}
+        <Card className={pageStyles.outfitSuggestionCard}>
+          <CardHeader className={pageStyles.outfitCardHeader}>
+            <CardTitle className={pageStyles.outfitCardTitle}>Sugerencia de Atuendo para Mañana</CardTitle>
+            <CardDescription className={pageStyles.outfitCardDescription}>Aquí hay una sugerencia de atuendo basada en el pronóstico para mañana.</CardDescription>
+          </CardHeader>
+          <CardContent className={pageStyles.outfitGrid}>
+            {tomorrowOutfit && Array.isArray(tomorrowOutfit) && tomorrowOutfit.map((item: any, index: number) => (
+              <div key={index} className={pageStyles.outfitItem}>
+                <div className={pageStyles.outfitImageContainer}>
+                  <img
+                    src={item.imagen_url || 'https://picsum.photos/100/100'}
+                    alt={item.nombre}
+                    className={pageStyles.outfitImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={pageStyles.outfitDetails}>
+                  <div><strong>Categoría:</strong> {item.categoria}</div>
+                  <div><strong>Color:</strong> {item.color}</div>
+                  <div><strong>Material:</strong> {item.material}</div>
+                  <div><strong>Descripción:</strong> {item.descripcion_adicional}</div>
+                </div>
+                <p className={pageStyles.outfitName}>{item.nombre}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Explanations Container */}
+            <div className={pageStyles.explanationsContainer}>
+              {/* Outfit Explanation */}
+              {explanation && (
+                <Card className={pageStyles.explanationCard}>
+                  <CardHeader className={pageStyles.explanationHeader}>
+                    <CardTitle className={pageStyles.explanationTitle}>Explicación</CardTitle>
+                    <CardDescription className={pageStyles.explanationDescription}>Por qué este atuendo es adecuado.</CardDescription>
+                  </CardHeader>
+                  <CardContent className={pageStyles.explanationContent}>
+                    <p className={pageStyles.explanationText}>{explanation}</p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Tomorrow Outfit Explanation */}
+              {tomorrowExplanation && (
+                <Card className={pageStyles.explanationCard}>
+                  <CardHeader className={pageStyles.explanationHeader}>
+                    <CardTitle className={pageStyles.explanationTitle}>Explicación para Mañana</CardTitle>
+                    <CardDescription className={pageStyles.explanationDescription}>Por qué este atuendo es adecuado para mañana.</CardDescription>
+                  </CardHeader>
+                  <CardContent className={pageStyles.explanationContent}>
+                    <p className={pageStyles.explanationText}>{tomorrowExplanation}</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+            </main>
+  );
 }

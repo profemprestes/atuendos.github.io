@@ -43,3 +43,645 @@
 .gap-4 {
   gap: 1rem;
 }
+
+/* Temperature Display Card Styles */
+.temperatureDisplayCard {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 1px solid #e2e8f0;
+}
+
+.temperatureCardHeader {
+  padding: 1.5rem;
+}
+
+.temperatureCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.temperatureCardDescription {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.temperatureValue {
+  font-weight: 700;
+  color: #3182ce;
+}
+
+/* Temperature Input Card Styles */
+.temperatureInputCard {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+}
+
+.temperatureInputHeader {
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.temperatureInputTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #166534;
+}
+
+.temperatureInputDescription {
+  color: #3f6212;
+  font-size: 0.9rem;
+}
+
+.temperatureSliderContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Slider track styles */
+.slider-track {
+  height: 0.5rem;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+}
+
+/* Slider range styles */
+.slider-range {
+  background-color: #3b82f6;
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.temperatureSlider {
+  margin-bottom: 0.5rem;
+}
+
+/* Temperature Display Styles */
+.temperatureDisplayContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.temperatureDisplay {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  color: #0369a1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Color variations based on temperature */
+.temperatureDisplay[data-temp-range="frio"] {
+  background: linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%);
+  color: #0369a1;
+}
+
+.temperatureDisplay[data-temp-range="templado"] {
+  background: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 100%);
+  color: #047857;
+}
+
+.temperatureDisplay[data-temp-range="calor"] {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  color: #b91c1c;
+}
+
+/* Style Selection Card Styles */
+.styleSelectionCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.styleSelectionCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.styleSelectionHeader {
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.styleSelectionTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.styleSelectionDescription {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.styleButtonsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.styleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.styleButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.styleButton:hover::before {
+  opacity: 0.1;
+}
+
+.styleButtonActive {
+  background-color: #e0e7ff;
+  border-color: #818cf8;
+  box-shadow: 0 0 0 1px #818cf8;
+}
+
+.styleButtonActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #6366f1;
+  animation: slideIn 0.3s ease-out;
+}
+
+.styleButtonIcon {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.styleButtonText {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.styleButton:hover .styleButtonIcon {
+  transform: scale(1.1);
+}
+
+.styleButton:hover .styleButtonText {
+  transform: translateX(2px);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Outfit Suggestion Card Styles */
+/* Outfits Container */
+.outfitsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  grid-column: span 2;
+}
+
+/* Make both cards consistent */
+.outfitSuggestionCard {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border: 1px solid #e5e7eb;
+  animation: fadeIn 0.5s ease-out;
+  height: 100%;
+}
+
+/* Adjust grid for smaller screens */
+@media (max-width: 768px) {
+  .outfitsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+.outfitCardHeader {
+  padding: 1.5rem 1.5rem 0.75rem;
+}
+
+.outfitCardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.outfitCardDescription {
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.outfitGrid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  padding: 1rem;
+}
+
+.outfitItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: slideUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.outfitItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.outfitImageContainer {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.outfitImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.outfitItem:hover .outfitImage {
+  transform: scale(1.05);
+}
+
+.outfitDetails {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #4b5563;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border-radius: 0.375rem;
+}
+
+.outfitDetails div {
+  margin-bottom: 0.25rem;
+}
+
+.outfitName {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+/* Staggered animations for items */
+.outfitItem:nth-child(1) { animation-delay: 0.1s; }
+.outfitItem:nth-child(2) { animation-delay: 0.2s; }
+.outfitItem:nth-child(3) { animation-delay: 0.3s; }
+.outfitItem:nth-child(4) { animation-delay: 0.4s; }
+.outfitItem:nth-child(5) { animation-delay: 0.5s; }
+
+/* Explanations Container */
+.explanationsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  grid-column: span 2;
+}
+
+/* Explanation Card Styles */
+.explanationCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  animation: fadeIn 0.5s ease-out;
+  height: 100%;
+}
+
+.explanationHeader {
+  padding: 1.25rem 1.5rem 0.75rem;
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.explanationTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.explanationDescription {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.explanationContent {
+  padding: 1.5rem;
+}
+
+.explanationText {
+  color: #334155;
+  line-height: 1.6;
+  animation: slideUp 0.4s ease-out;
+}
+
+/* Animation for text appearance */
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Adjust grid for smaller screens */
+@media (max-width: 768px) {
+  .explanationsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sliderWrapper {
+  position: relative;
+  height: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.temperatureSlider {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.temperatureSlider [data-part="track"] {
+  height: 100%;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+}
+
+.temperatureSlider [data-part="range"] {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 9999px;
+}
+
+/* Full-width hero container */
+.heroContainer {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+/* Hero section styles */
+.hero {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+/* Content container */
+.contentContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Inputs row adjustments */
+.inputsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 300px;
+    padding: 1.5rem;
+  }
+  
+  .inputsRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .temperatureInputCard,
+  .styleSelectionCard {
+    width: 100%;
+  }
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  animation: pulse 8s infinite alternate;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  text-align: center;
+  animation: fadeInUp 1s ease-out;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.heroTitleLine {
+  display: block;
+  animation: slideIn 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.heroTitleLine:first-child {
+  animation-delay: 0.3s;
+}
+
+.heroTitleLine:last-child {
+  animation-delay: 0.6s;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeIn 1s ease-out 0.9s forwards;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0.1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero {
+    min-height: 300px;
+    padding: 1.5rem;
+  }
+  
+  .heroTitle {
+    font-size: 2rem;
+  }
+  
+  .heroDescription {
+    font-size: 1rem;
+  }
+}
+
+/* Hero Temperature Styles */
+.heroTemperature {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 20px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.8s ease-out 1.2s forwards;
+  opacity: 0;
+}
+
+.heroTemperatureCurrent {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.heroTemperatureValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.heroTemperatureForecast {
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.heroTemperatureForecast span {
+  display: flex;
+  align-items: center;
+}
+
+/* Combined Inputs Row */
+.inputsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Adjust card widths */
+.temperatureInputCard {
+  width: 100%;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+}
+
+.styleSelectionCard {
+  width: 100%;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .inputsRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .temperatureInputCard,
+  .styleSelectionCard {
+    width: 100%;
+  }
+}
