@@ -1,227 +1,45 @@
 .container {
+  display: grid;
+  gap: 20px;
   padding: 20px;
   margin: 0 auto;
   max-width: 1200px;
+  width: 100%;
 }
 
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+/* Add these new classes */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.card {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.md-col-span-2 {
+  grid-column: span 2;
 }
 
-.cardHeader {
-  margin-bottom: 15px;
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.cardTitle {
-  font-size: 1.5em;
-  margin-bottom: 5px;
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
-.cardDescription {
-  color: gray;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.sliderContainer {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-.slider {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.temperatureValue {
-  font-size: 1.2em;
-}
-
-.styleButtons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.styleButton {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.styleButton:hover {
-  background-color: #0056b3;
-}
-
-.outfitGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.outfitItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid #ddd; /* Subtle border for each item */
-  padding: 10px; /* Add some padding inside the outfit item */
-  border-radius: 8px; /* Rounded corners for the outfit item */
-}
-
-.outfitImage {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 5px;
-}
-
-.outfitName {
-  font-size: 0.9em;
-  text-align: center;
-}
-
-.explanation {
-  margin-top: 20px;
-  font-style: italic;
-  color: #555;
-}
-
-.temperature {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.forecast {
-  font-size: 1em;
-  color: #777;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
-
-  .cardGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .styleButtons {
-    flex-direction: column;
-  }
-
-  .outfitGrid {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  }
-
-  .outfitImage {
-    width: 60px;
-    height: 60px;
+.md-grid-cols-3 {
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.temperatureDisplayCard {
-  /* Add specific styles for the temperature display card */
-  background-color: #f0faff;
-  /* Light blue background */
-  border: 1px solid #b0e2ff;
-  /* Light blue border */
-  color: #333;
-  /* Darker text for better readability */
-}
-
-.temperatureInputCard {
-  /* Add specific styles for the temperature input card */
-  background-color: #fffff0;
-  /* Light yellow background */
-  border: 1px solid #eee8aa;
-  /* Light yellow border */
-}
-
-/* Style selection */
-.styleButtons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 8px;
-}
-
-.styleButton {
-  padding: 12px 16px;
-  border-radius: 20px;
-  font-size: 0.9em;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.styleButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.styleButton:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
-}
-
-.card {
-  border-radius: 12px; /* Rounded corners for cards */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
-}
-
-.cardHeader {
-  padding: 16px 24px; /* Increased padding in header */
-}
-
-.cardTitle {
-  font-size: 1.75em; /* Slightly larger title */
-  color: #333; /* Darker title */
-  margin-bottom: 8px; /* Spacing below title */
-}
-
-.cardDescription {
-  font-size: 1.1em; /* Slightly larger description */
-  color: #666; /* A bit darker description */
-}
-
-.cardContent {
-  padding: 16px 24px; /* More padding in content area */
-}
-
-.outfitDetails {
-  text-align: center; /* Center-align the text */
-  margin-top: 8px; /* Add some space above the text */
-  color: #777; /* A slightly lighter text color */
-}
-
-.outfitItem{
-   border: 1px solid #ddd; /* Subtle border for each item */
-  padding: 10px; /* Add some padding inside the outfit item */
-  border-radius: 8px; /* Rounded corners for the outfit item */
-}
-/* Styles for the image */
-.outfitImage {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 5px;
-}
-
-/* Styles for the outfit name */
-.outfitName {
-  font-size: 0.9em;
-  text-align: center;
+.gap-4 {
+  gap: 1rem;
 }

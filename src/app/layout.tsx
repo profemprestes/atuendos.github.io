@@ -1,6 +1,7 @@
-import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import Head from './head';
+import { Scripts } from '@/components/Scripts';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,20 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Atuendos - Mati y Cami',
-  description: 'Generado con IA',
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
+      <Head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased scroll-smooth transition-colors duration-500`}>
         {children}
+        <Scripts />
       </body>
     </html>
   );

@@ -1,14 +1,14 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Slider} from '@/components/ui/slider';
 import {Button} from '@/components/ui/button';
 import {generateOutfitWithData} from '@/ai/flows/generate-outfit-with-data';
 import {useToast} from "@/hooks/use-toast";
 import {cn} from "@/lib/utils";
-import {explainOutfitChoice} from "@/ai/flows/explain-outfit-choice";
 import pageStyles from './page.module.css';
+import { metadata } from './head';
 
 const stylesArr = [
   {name: 'Trabajo', icon: '💼'},
@@ -163,9 +163,9 @@ export default function Home() {
   };
 
   return (
-    <div className={cn("fade-in container mx-auto p-4 grid gap-4 grid-cols-1 md:grid-cols-2", pageStyles.container)}>
+    <div className={pageStyles.container}>
       {/* Temperature Display */}
-      <Card className={cn("shadow-md fade-in", pageStyles.card, pageStyles.temperatureDisplayCard)}>
+      <Card className={cn(pageStyles.card, pageStyles.temperatureDisplayCard)}>
         <CardHeader className={pageStyles.cardHeader}>
           <CardTitle className={pageStyles.cardTitle}>Temperatura Actual y Pronóstico</CardTitle>
           <CardDescription className={pageStyles.cardDescription}>
@@ -181,37 +181,37 @@ export default function Home() {
       </Card>
 
       {/* Temperature Input */}
-      <Card className={cn("shadow-md fade-in", pageStyles.card)}>
+      <Card className={cn(pageStyles.card, pageStyles.temperatureInputCard)}>
         <CardHeader className={pageStyles.cardHeader}>
           <CardTitle className={pageStyles.cardTitle}>Temperatura Preferida</CardTitle>
           <CardDescription className={pageStyles.cardDescription}>Ajusta la temperatura para ver sugerencias de atuendos.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2">
-            <Slider
-              defaultValue={[20]}
-              min={0}
-              max={35}
-              step={1}
-              onValueChange={(value) => setTemperature(value[0])}
-              disabled={loading || error !== null}
-            />
-            <span className={pageStyles.temperatureValue}>{temperature !== null ? temperature : '--'}°C</span>
-          </div>
+        <CardContent className={pageStyles.sliderContainer}>
+          <Slider
+            className={pageStyles.slider}
+            defaultValue={[20]}
+            min={0}
+            max={35}
+            step={1}
+            onValueChange={(value) => setTemperature(value[0])}
+            disabled={loading || error !== null}
+          />
+          <span className={pageStyles.temperatureValue}>{temperature !== null ? temperature : '--'}°C</span>
         </CardContent>
       </Card>
 
       {/* Style Selection */}
-      <Card className={cn("shadow-md fade-in", pageStyles.card)}>
+      <Card className={pageStyles.card}>
         <CardHeader className={pageStyles.cardHeader}>
           <CardTitle className={pageStyles.cardTitle}>Estilo</CardTitle>
           <CardDescription className={pageStyles.cardDescription}>Escoge tu estilo preferido.</CardDescription>
         </CardHeader>
-        <CardContent className={cn("grid gap-4 grid-cols-3", pageStyles.styleButtons)}>
+        <CardContent className={pageStyles.styleButtons}>
           {stylesArr.map((style) => (
             <Button
               key={style.name}
-              variant={selectedStyle === style.name ? 'primary' : 'secondary'}
+              className={pageStyles.styleButton}
+              variant={selectedStyle === style.name ? 'default' : 'secondary'}
               onClick={() => setSelectedStyle(style.name)}
             >
               {style.icon} {style.name}
@@ -299,4 +299,11 @@ export default function Home() {
       )}
     </div>
   );
+  useEffect(() => {
+    if (temperature !== null) {
+      document.title = `Atuendos para ${temperature}°C | ${metadata.title?.toString() || 'Atuendos'}`;
+    } else {
+      document.title = metadata.title?.toString() || 'Atuendos';
+    }
+  }, [temperature]);
 }
