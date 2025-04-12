@@ -12,7 +12,8 @@ import { metadata } from './head';
 import Hero from './hero';
 
 // First, add this import at the top with other imports
-import { Icons } from '@/components/icons';
+// Update this import line
+import { Icons, IconName } from '@/components/icons';
 
 const stylesArr = [
   {name: 'Trabajo', icon: 'workflow'},
@@ -21,7 +22,7 @@ const stylesArr = [
   {name: 'Casa Formal', icon: 'shield'},
   {name: 'Deporte', icon: 'share'},
   {name: 'Salidas', icon: 'messageSquare'},
-];
+] as const;
 
 const temperatureRanges = {
   frio: {min: -10, max: 10},
@@ -234,7 +235,8 @@ export default function Home() {
           </CardHeader>
           <CardContent className={pageStyles.styleButtonsContainer}>
             {stylesArr.map((style) => {
-              const IconComponent = Icons[style.icon.toLowerCase().replace(' ', '')] || Icons.workflow;
+              const iconKey = style.icon as IconName;
+              const IconComponent = Icons[iconKey];
               return (
                 <Button
                   key={style.name}

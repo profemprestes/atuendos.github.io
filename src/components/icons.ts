@@ -1,6 +1,34 @@
 import {ArrowRight, Check, ChevronsUpDown, Circle, Copy, Edit, ExternalLink, File, HelpCircle, Home, Loader2, Mail, MessageSquare, Moon, Plus, PlusCircle, Search, Server, Settings, Share2, Shield, Sun, Trash, User, X, Workflow} from 'lucide-react';
 
-const Icons = {
+export type IconName = 
+  | 'arrowRight' 
+  | 'check' 
+  | 'chevronDown' 
+  | 'circle' 
+  | 'workflow' 
+  | 'close' 
+  | 'copy' 
+  | 'dark' 
+  | 'edit' 
+  | 'externalLink' 
+  | 'file' 
+  | 'help' 
+  | 'home' 
+  | 'light' 
+  | 'loader' 
+  | 'mail' 
+  | 'messageSquare' 
+  | 'plus' 
+  | 'plusCircle' 
+  | 'search' 
+  | 'server' 
+  | 'settings' 
+  | 'share' 
+  | 'shield' 
+  | 'trash' 
+  | 'user';
+
+export const Icons: Record<IconName, any> = {
   arrowRight: ArrowRight,
   check: Check,
   chevronDown: ChevronsUpDown,
@@ -25,9 +53,6 @@ const Icons = {
   settings: Settings,
   share: Share2,
   shield: Shield,
-  spinner: Loader2,
   trash: Trash,
-  user: User,
+  user: User
 };
-
-export {Icons};
